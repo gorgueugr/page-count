@@ -1,0 +1,30 @@
+{
+  "name": "page-count",
+  "version": "0.0.1",
+  "description": "Module to count pages of docx, pptx, doc, ppt and pdf documents.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gorguexo/page-count.git"
+  },
+  "keywords": [
+    "pdf",
+    "docx",
+    "doc",
+    "ppt",
+    "pptx"
+  ],
+  "author": "Jorge Soler Padial",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gorguexo/page-count/issues"
+  },
+  "homepage": "https://github.com/gorguexo/page-count#readme",
+  "devDependencies": {
+    "typescript": "^4.5.5"
+  }
+}
