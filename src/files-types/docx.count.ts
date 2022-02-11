@@ -14,7 +14,7 @@ export class DocxCounter implements ICounter {
                 if (err) resolve(0);
     
                 if (result['Properties']['Pages'][0]) {
-                    resolve(result['Properties']['Pages'][0]);
+                    resolve(parseInt(result['Properties']['Pages'][0]));
                 } 
                 resolve(0);
             })

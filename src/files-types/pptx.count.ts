@@ -13,7 +13,7 @@ export class PptxCounter implements ICounter {
                         const entryStr: string = await streamToString(entry);
                         parseString(entryStr, (err, result) => {
                             if (result['Properties']['Slides'][0]) {
-                                return resolve(result['Properties']['Slides'][0])
+                                return resolve(parseInt(result['Properties']['Slides'][0]));
                             } else {
                                 return reject(`Cannot find page count. Error: ${err}`);
                             }
