@@ -1,7 +1,7 @@
-import { DocCounter } from "./doc.count";
+// import { DocCounter } from "./doc.count";
 import { DocxCounter } from "./docx.count";
 import { PdfCounter } from "./pdf.count";
-import { PptCounter } from "./ppt.count";
+// import { PptCounter } from "./ppt.count";
 import { PptxCounter } from "./pptx.count";
 import { OdtCounter } from "./odt.count";
 
