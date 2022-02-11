@@ -5,11 +5,22 @@ import { PptCounter } from "./ppt.count";
 import { PptxCounter } from "./pptx.count";
 import { OdtCounter } from "./odt.count";
 
+
+
+export {
+        PdfCounter,
+        // DocCounter,
+        DocxCounter,
+        // PptCounter,
+        PptxCounter,
+        OdtCounter,
+}
+
 export const filesCounters = {
         "pdf": PdfCounter,
-        "doc": DocCounter,
+        // "doc": DocCounter,
         "docx": DocxCounter,
-        "ppt": PptCounter,
+        // "ppt": PptCounter,
         "pptx": PptxCounter,
         "odt": OdtCounter,
 }

@@ -1,6 +1,9 @@
 import { filesCounters } from "./files-types";
 import { FileTypes } from "./files-types/base.count";
 
+
+
+
 export function countPages(buffer: Buffer, type: FileTypes) : Promise<number> | number {
     const counterClass = filesCounters[type];
     

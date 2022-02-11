@@ -1,4 +1,4 @@
-export type FileTypes = "pdf" | "doc" | "docx" | "ppt" | "pptx" | "odt";
+export type FileTypes = "pdf" | "docx" | "pptx" | "odt" ; // | "doc" |  "ppt";
 
 export abstract class ICounter {
     static count(buffer: Buffer) : Promise<number> | number {
