@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Module to count pages of docx, pptx, doc, ppt and pdf documents.",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "jest"
@@ -14,9 +18,10 @@
   "keywords": [
     "pdf",
     "docx",
-    "doc",
-    "ppt",
-    "pptx"
+    "pptx",
+    "odt",
+    "page",
+    "count"
   ],
   "author": "Jorge Soler Padial",
   "license": "MIT",
@@ -31,7 +36,7 @@
     "typescript": "^4.5.5"
   },
   "dependencies": {
-    "unzip": "^0.1.11",
+    "unzipper": "^0.10.11",
     "xml2js": "^0.4.23"
   }
 }

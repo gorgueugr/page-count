@@ -1,5 +1,4 @@
-import * as unzip from 'unzip';
-import { parseString } from 'xml2js';
+import * as unzip from 'unzipper';
 import { ICounter } from './base.count';
 import { bufferToStream, streamToString } from "./shared";
 
