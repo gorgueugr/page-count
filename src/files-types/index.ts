@@ -11,5 +11,5 @@ export const filesCounters = {
         "docx": DocxCounter,
         "ppt": PptCounter,
         "pptx": PptxCounter,
-        "odt": OdtCounter
+        "odt": OdtCounter,
 }
