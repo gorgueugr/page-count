@@ -3,7 +3,7 @@ import { ICounter } from './base.count';
 import { bufferToStream, streamToString } from "./shared";
 
 export class OdtCounter implements ICounter {
-    static count(buffer: Buffer): Promise<number> {
+    static count(buffer: Uint8Array | Buffer): Promise<number> {
         return new Promise(async (resolve, reject) => {
             bufferToStream(buffer)
                 .pipe(unzip.Parse())

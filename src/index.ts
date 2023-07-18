@@ -3,7 +3,7 @@ import { FileTypes } from "./files-types/base.count";
 
 export * from "./files-types";
 
-export default function countPages(buffer: Buffer, type: FileTypes): Promise<number> | number {
+export default function countPages(buffer: Uint8Array | Buffer, type: FileTypes): Promise<number> | number {
     const counterClass = filesCounters[type];
 
     if (!counterClass) {

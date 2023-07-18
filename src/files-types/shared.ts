@@ -2,7 +2,7 @@ import { Readable, Stream } from "stream";
 
 
 
-export function bufferToStream(buffer: Buffer) { 
+export function bufferToStream(buffer: Uint8Array) { 
     var stream = new Readable();
     stream.push(buffer);
     stream.push(null);

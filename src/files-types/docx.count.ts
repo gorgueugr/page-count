@@ -24,7 +24,7 @@ export class DocxCounter implements ICounter {
 
 
 
-    static count(buffer: Buffer): Promise<number> {
+    static count(buffer: Uint8Array | Buffer): Promise<number> {
         return new Promise(async (resolve) => {
             bufferToStream(buffer)
                 .pipe(unzip.Parse())

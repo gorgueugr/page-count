@@ -1,11 +1,15 @@
 import { ICounter } from "./base.count";
-import {getDocument} from 'pdfjs-dist';
+import pdfParse from 'pdf-parse';
 
 export class PdfCounter implements ICounter {
-    static async count(buffer: Buffer): Promise<number> {
-            const doc = await getDocument(buffer).promise;
-            const pages = doc?.numPages;
 
-            return pages || 0;
+
+    static async count(buffer: Uint8Array | Buffer): Promise<number> {
+            if (buffer instanceof Buffer) {
+                buffer = new Uint8Array(buffer);
+            }
+            const { numpages } = await pdfParse(buffer);
+
+            return numpages || 0;
     }
 }
