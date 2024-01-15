@@ -1,6 +1,6 @@
 {
   "name": "page-count",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Module to count pages of docx, pptx, doc, ppt and pdf documents.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
