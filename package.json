@@ -1,34 +1,41 @@
 {
   "name": "page-count",
-  "version": "0.0.5",
-  "description": "Module to count pages of docx, pptx, doc, ppt and pdf documents.",
+  "version": "0.1.0",
+  "description": "Module to count pages of pdf, docx, pptx, xlsx, odt, odp, ods, doc, ppt and rtf documents.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
     "test": "jest"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gorguexo/page-count.git"
+    "url": "git+https://github.com/gorgueugr/page-count.git"
   },
   "keywords": [
     "pdf",
     "docx",
+    "doc",
     "pptx",
+    "ppt",
+    "xlsx",
     "odt",
+    "odp",
+    "ods",
+    "rtf",
     "page",
     "count"
   ],
   "author": "Jorge Soler Padial",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/gorguexo/page-count/issues"
+    "url": "https://github.com/gorgueugr/page-count/issues"
   },
-  "homepage": "https://github.com/gorguexo/page-count#readme",
+  "homepage": "https://github.com/gorgueugr/page-count#readme",
   "devDependencies": {
     "@types/graceful-fs": "^4.1.6",
     "@types/jest": "^29.5.3",
