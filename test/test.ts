@@ -24,8 +24,23 @@ describe("Test docx", () => {
     expect(await DocxCounter.count(buffer)).toBe(10);
   });
 
-  it("should throw an error for an incompatible docx", async () => {
+  it("should count pages when docProps/app.xml has no Pages value", async () => {
     const buffer = readFileSync("test/files/file-sample_100kB.docx");
+    expect(await DocxCounter.count(buffer)).toBe(1);
+  });
+
+  it("should count explicit page breaks when app.xml has no Pages value", async () => {
+    const buffer = readFileSync("test/files/test-docx-without-props.docx");
+    expect(await DocxCounter.count(buffer)).toBe(3);
+  });
+
+  it("should not trust a stale Pages value when the document has rendered breaks", async () => {
+    const buffer = readFileSync("test/files/test-docx-stale-props.docx");
+    expect(await DocxCounter.count(buffer)).toBe(5);
+  });
+
+  it("should throw an error when the buffer is not a docx", async () => {
+    const buffer = readFileSync("test/files/test-1.pdf");
     await expect(DocxCounter.count(buffer)).rejects.toThrow(
       FileNotCompatibleError
     );
@@ -41,6 +56,18 @@ describe("Test pptx", () => {
   it("should count 10 pages on pptx", async () => {
     const buffer = readFileSync("test/files/test-10.pptx");
     expect(await PptxCounter.count(buffer)).toBe(10);
+  });
+
+  it("should count slides when docProps/app.xml has no Slides value", async () => {
+    const buffer = readFileSync("test/files/test-pptx-without-props.pptx");
+    expect(await PptxCounter.count(buffer)).toBe(10);
+  });
+
+  it("should throw an error when the buffer is not a pptx", async () => {
+    const buffer = readFileSync("test/files/test-1.pdf");
+    await expect(PptxCounter.count(buffer)).rejects.toThrow(
+      FileNotCompatibleError
+    );
   });
 });
 
