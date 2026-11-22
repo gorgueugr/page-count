@@ -1,65 +1,59 @@
-import * as unzip from 'unzipper';
-import { parseString } from 'xml2js';
-import { FileNotCompatibleError } from '../errors/FileNotCompatibleError';
-import { ICounter } from './base.count';
+import { FileNotCompatibleError } from "../errors/FileNotCompatibleError";
+import { ICounter } from "./base.count";
+import { openPackage, readExtendedProperty } from "./ooxml";
 
-export class PptxCounter extends ICounter {
+const SLIDE_PART = /^ppt\/slides\/slide\d+\.xml$/;
 
-    private static _slidesFromProps(xmlStr: string): Promise<number | undefined> {
-        return new Promise((resolve) => {
-            try {
-                parseString(xmlStr, { explicitArray: true }, (err, result) => {
-                    if (err || !result || typeof result !== 'object') {
-                        return resolve(undefined);
-                    }
+/**
+ * PowerPoint presentations store the number of slides in docProps/app.xml.
+ * When that value is missing the slides can be counted exactly anyway: every
+ * slide is a part of the package.
+ */
+export class PptxCounter implements ICounter {
+  static async count(buffer: Uint8Array | Buffer): Promise<number> {
+    const packageFile = await openPackage(buffer);
+    const slides = packageFile.list().filter((path) => SLIDE_PART.test(path));
 
-                    // Namespace prefixes are not guaranteed, compare on the local name.
-                    const propertiesKey = Object.keys(result).find((key) => /(^|:)Properties$/.test(key));
-                    const properties = propertiesKey ? result[propertiesKey] : undefined;
-                    if (!properties || typeof properties !== 'object') {
-                        return resolve(undefined);
-                    }
-
-                    const slidesKey = Object.keys(properties).find((key) => /(^|:)Slides$/.test(key));
-                    const rawSlides = slidesKey ? properties[slidesKey] : undefined;
-                    const slides = parseInt(String(Array.isArray(rawSlides) ? rawSlides[0] : rawSlides), 10);
-
-                    resolve(Number.isFinite(slides) && slides > 0 ? slides : undefined);
-                });
-            } catch (error) {
-                resolve(undefined);
-            }
-        });
+    if (!packageFile.has("docProps/app.xml") && slides.length === 0) {
+      throw new FileNotCompatibleError();
     }
 
-    static async count(buffer: Uint8Array | Buffer): Promise<number> {
-        let directory: any;
-
-        try {
-            directory = await unzip.Open.buffer(Buffer.from(buffer));
-        } catch (error) {
-            throw new FileNotCompatibleError();
-        }
-
-        const files = (directory && directory.files) || [];
-        const propsFile = files.find((file: any) => file.path === 'docProps/app.xml');
-        const slides = files.filter((file: any) => /^ppt\/slides\/slide\d+\.xml$/.test(file.path));
-
-        if (propsFile) {
-            try {
-                const fromProps = await PptxCounter._slidesFromProps((await propsFile.buffer()).toString('utf8'));
-                if (fromProps) {
-                    return fromProps;
-                }
-            } catch (error) {
-                // fall back to counting the slide files below
-            }
-        }
-
-        if (slides.length > 0) {
-            return slides.length;
-        }
-
-        throw new FileNotCompatibleError();
+    const propsXml = await packageFile.readText("docProps/app.xml");
+    if (propsXml) {
+      const stored = await readExtendedProperty(propsXml, "Slides");
+      if (stored) {
+        return stored;
+      }
     }
+
+    if (slides.length > 0) {
+      return slides.length;
+    }
+
+    throw new FileNotCompatibleError(
+      "The presentation has no stored slide count and no slides."
+    );
+  }
+
+  /** Same as count: the slide parts give the exact number, nothing to estimate. */
+  static async estimate(
+    buffer: Uint8Array | Buffer
+  ): Promise<{ pages: number; estimated: boolean; method: "stored" | "parts" }> {
+    const packageFile = await openPackage(buffer);
+    const propsXml = await packageFile.readText("docProps/app.xml");
+
+    if (propsXml) {
+      const stored = await readExtendedProperty(propsXml, "Slides");
+      if (stored) {
+        return { pages: stored, estimated: false, method: "stored" };
+      }
+    }
+
+    const slides = packageFile.list().filter((path) => SLIDE_PART.test(path));
+    if (slides.length === 0) {
+      throw new FileNotCompatibleError("The presentation has no slides.");
+    }
+
+    return { pages: slides.length, estimated: false, method: "parts" };
+  }
 }
